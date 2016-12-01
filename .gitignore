@@ -27,3 +27,11 @@
 *.exe
 *.out
 *.app
+
+# VIM
+.vimrc
+.ycm_extra_conf.py
+*.swp
+
+# Build directories
+build
