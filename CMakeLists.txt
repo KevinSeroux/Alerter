@@ -9,16 +9,21 @@ file(
 	src/*
 )
 
-include_directories(include)
-
-find_package(Threads)
+find_package(Threads REQUIRED)
+find_package(Boost REQUIRED)
 
 add_executable(
 	AlerterSrv
 	${source_files}
 )
 
+include_directories(
+	include
+	${Boost_INCLUDE_DIRS}
+)
+
 target_link_libraries(
 	AlerterSrv
 	${CMAKE_THREAD_LIBS_INIT}
+	${Boost_LIBRARIES}
 )

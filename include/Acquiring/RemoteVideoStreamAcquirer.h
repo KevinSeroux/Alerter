@@ -2,13 +2,15 @@
 #define REMOTE_VIDEO_STREAM_ACQUIRER
 
 #include "Interfaces/VideoStreamAcquirerInt.h"
-#include "Thread.h"
+#include <Thread.h>
 
 namespace acquiring
 {
-    class RemoteVideoStreamAcquirer : public VideoStreamAcquirerInt, public Thread
+    class RemoteVideoStreamAcquirer :
+	public VideoStreamAcquirerInt, public Thread
     {
     public:
+		RemoteVideoStreamAcquirer();
         void getImage();
 
     private:
