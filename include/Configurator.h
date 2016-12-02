@@ -17,8 +17,11 @@ class Configurator : public Singleton<Configurator>
 	friend class Singleton<Configurator>;
 
 public:
-	OptionTypedData& operator[](const char*);
-	const OptionTypedData& operator[](const char*) const;
+	/* \param id The option identifier
+	 * \param create Set to true if the option must be created */
+	OptionTypedData& operator()(const char* id, bool doCreate = false);
+
+	const OptionTypedData& operator()(const char*) const;
 
 private:
 	Configurator();

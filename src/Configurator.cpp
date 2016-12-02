@@ -2,12 +2,20 @@
 
 Configurator::Configurator() {}
 
-OptionTypedData& Configurator::operator[](const char* id)
+OptionTypedData& Configurator::operator()(const char* id, bool doCreate)
 {
-	return m_options[id];
+	if(doCreate)
+		return m_options[id];
+	else
+	{
+		/* Cast current object to const to avoid ambiguous operator()()
+		 * otherwise, infinite loop on operator()(const char*, bool) */
+		const Configurator * const constThis = this;
+		constThis->operator()(id);
+	}
 }
 
-const OptionTypedData& Configurator::operator[](const char* id) const
+const OptionTypedData& Configurator::operator()(const char* id) const
 {
 	auto optionIt =	m_options.find(id);
 

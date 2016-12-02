@@ -6,8 +6,7 @@ using namespace acquiring;
 
 RemoteVideoStreamAcquirer::RemoteVideoStreamAcquirer()
 {
-	std::string str("undefined");
-	Configurator::getInstance()["StreamLocation"] = str;
+	Configurator::getInstance()("StreamLocation", true) = "undefined";
 }
 
 void RemoteVideoStreamAcquirer::getImage()
