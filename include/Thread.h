@@ -7,17 +7,17 @@
 class Thread : public WorkerInt
 {
 public:
-    Thread();
-    virtual ~Thread();
+	Thread();
+	virtual ~Thread();
 
-    void start();
-    void join();
+	void start();
+	void join();
 
 protected:
-    virtual void run() = 0;
+	virtual void run() = 0;
 
 private:
-    std::thread m_thread;
+	std::thread m_thread;
 };
 
 #endif // THREAD_H

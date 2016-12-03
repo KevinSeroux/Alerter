@@ -6,16 +6,16 @@
 
 namespace acquiring
 {
-    class RemoteVideoStreamAcquirer :
+	class RemoteVideoStreamAcquirer :
 	public VideoStreamAcquirerInt, public Thread
-    {
-    public:
+	{
+	public:
 		RemoteVideoStreamAcquirer();
-        void getImage();
+		void getImage();
 
-    private:
-        void run();
-    };
+	private:
+		void run();
+	};
 }
 
 #endif // REMOTE_VIDEO_STREAM_ACQUIRER

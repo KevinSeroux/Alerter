@@ -10,7 +10,7 @@ BoostSocketSrv::BoostSocketSrv() :
 	m_acceptor(m_ioService, ip::tcp::endpoint(ip::tcp::v4(), 2000)),
 	m_socket(m_ioService)
 {
-	
+
 }
 
 void BoostSocketSrv::run()
@@ -20,7 +20,7 @@ void BoostSocketSrv::run()
 		// Accept the next connection (blocking)
 		m_acceptor.accept(m_socket);
 		m_doResetConnection = false;
-		
+
 		// Repeat until the connection must be reset (client disconnect, ...)
 		while(!m_doResetConnection)
 		{
@@ -67,7 +67,7 @@ std::string BoostSocketSrv::receive() const
 }
 
 void BoostSocketSrv::handleSend(
-	const error_code& theError, size_t bytes_transferred)
+		const error_code& theError, size_t bytes_transferred)
 {
 	handleIfError(theError);
 }

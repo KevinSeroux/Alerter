@@ -11,7 +11,7 @@ Communicator::Communicator()
 
 void Communicator::run()
 {
-    std::cout << typeid(this).name() << " Hello!";
+	std::cout << typeid(this).name() << " Hello!";
 
 	while(true)
 	{

@@ -5,11 +5,11 @@
 
 namespace performing
 {
-    class OpenCVPerformer : public PerformerInt
-    {
-    public:
-        void performImage();
-    };
+	class OpenCVPerformer : public PerformerInt
+	{
+	public:
+		void performImage();
+	};
 }
 
 #endif // OPENCV_PERFORMER__H

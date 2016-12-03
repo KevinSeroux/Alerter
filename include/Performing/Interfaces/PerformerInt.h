@@ -3,11 +3,11 @@
 
 namespace performing
 {
-    class PerformerInt
-    {
-    public:
-        virtual void performImage() = 0;
-    };
+	class PerformerInt
+	{
+	public:
+		virtual void performImage() = 0;
+	};
 }
 
 #endif // PERFORMER_INT__H

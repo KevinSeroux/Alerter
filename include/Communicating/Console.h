@@ -10,13 +10,13 @@ namespace communicating
 	// Anticipated declaration to avoid cyclic inclusions
 	class LanguageInt;
 
-    class Console : public IOInt
-    {
+	class Console : public IOInt
+	{
 	public:
 		Console(LanguageInt&);
-        bool receive(Option&);
-        void send(const std::string&);
-    };
+		bool receive(Option&);
+		void send(const std::string&);
+	};
 }
 
 #endif // CONSOLE__H

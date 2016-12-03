@@ -7,12 +7,12 @@
 
 namespace performing
 {
-    class Performer : public Thread, private DependencyInjector<PerformerInt>
-    {
-    public:
-        Performer(PerformerInt&);
-        void run();
-    };
+	class Performer : public Thread, private DependencyInjector<PerformerInt>
+	{
+	public:
+		Performer(PerformerInt&);
+		void run();
+	};
 }
 
 #endif // PERFORMER__H

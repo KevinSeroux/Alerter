@@ -17,7 +17,7 @@ void RemoteVideoStreamAcquirer::getImage()
 
 void RemoteVideoStreamAcquirer::run()
 {
-    std::cout << typeid(this).name() << " Hello!" << std::endl;
+	std::cout << typeid(this).name() << " Hello!" << std::endl;
 
 	while(true)
 	{

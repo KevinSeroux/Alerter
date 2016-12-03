@@ -12,7 +12,7 @@ Performer::Performer(PerformerInt& impl)
 
 void Performer::run()
 {
-    std::cout << typeid(this).name() << " Hello!" << std::endl;
+	std::cout << typeid(this).name() << " Hello!" << std::endl;
 
 	while(true)
 	{

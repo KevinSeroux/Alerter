@@ -6,10 +6,10 @@
 
 namespace communicating
 {
-    class StatementFormat : public LanguageInt
-    {
-        bool translateObject(std::string&, Option&);
-    };
+	class StatementFormat : public LanguageInt
+	{
+		bool translateObject(std::string&, Option&);
+	};
 }
 
 #endif // STATEMENT_FORMAT__H

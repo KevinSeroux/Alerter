@@ -8,14 +8,14 @@
 
 namespace communicating
 {
-    class Communicator : public Thread, public DependencyInjector<IOInt>
-    {
-    public:
-        Communicator();
+	class Communicator : public Thread, public DependencyInjector<IOInt>
+	{
+	public:
+		Communicator();
 
-    private:
-        void run();
-    };
+	private:
+		void run();
+	};
 }
 
 #endif // COMMUNICATOR__H

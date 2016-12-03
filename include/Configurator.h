@@ -20,7 +20,7 @@ struct Option
 
 class Configurator : public Singleton<Configurator>
 {
-	friend class Singleton<Configurator>;
+friend class Singleton<Configurator>;
 
 public:
 	/* \param id The option identifier

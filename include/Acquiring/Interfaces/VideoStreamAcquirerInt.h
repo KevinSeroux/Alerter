@@ -3,11 +3,11 @@
 
 namespace acquiring
 {
-    class VideoStreamAcquirerInt
-    {
-    public:
-        virtual void getImage() = 0;
-    };
+	class VideoStreamAcquirerInt
+	{
+	public:
+		virtual void getImage() = 0;
+	};
 }
 
 #endif // VIDEO_STREAM_ACQUIRER_INT

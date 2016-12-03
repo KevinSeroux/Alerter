@@ -12,18 +12,18 @@ public:
 	/* Function to add an implementation. Make sure that the referenced
 	 * implementation is not destroyed */
 	void addImpl(T&);
-	
+
 protected:
-    DependencyInjector();
-    virtual ~DependencyInjector() = 0;
+	DependencyInjector();
+	virtual ~DependencyInjector() = 0;
 
 	/* Call this method with a lambda function to iterate over the
 	 * implementations */
-    template <typename Function> void forEach(Function);
+	template <typename Function> void forEach(Function);
 
 private:
-    std::vector<T*> m_implementations;
-    std::mutex m_implProtector;
+	std::vector<T*> m_implementations;
+	std::mutex m_implProtector;
 };
 
 template <class T> DependencyInjector<T>::DependencyInjector() {}
