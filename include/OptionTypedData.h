@@ -8,6 +8,9 @@
 class OptionTypedData
 {
 public:
+	OptionTypedData();
+	OptionTypedData(const OptionTypedData&);
+
 	OptionTypedData& operator=(const char[]);
 	template <class T> OptionTypedData& operator=(T&);
 

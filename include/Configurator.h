@@ -12,6 +12,12 @@ public:
 	OptionNotFound(std::string& str) : runtime_error(str) {}
 };
 
+struct Option
+{
+	std::string id;
+	OptionTypedData data;
+};
+
 class Configurator : public Singleton<Configurator>
 {
 	friend class Singleton<Configurator>;

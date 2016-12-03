@@ -2,7 +2,7 @@
 
 using namespace communicating;
 
-void StatementFormat::translateObject()
+bool StatementFormat::translateObject(std::string& str, Option& option)
 {
-
+	return false;
 }

@@ -42,7 +42,7 @@ void DependencyInjector<T>::forEach(Function f)
 {
 	m_implProtector.lock();
 
-	for(auto& impl : m_implementations)
+	for(auto impl : m_implementations)
 	{
 		f(impl);
 	}

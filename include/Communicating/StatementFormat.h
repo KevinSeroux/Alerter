@@ -2,12 +2,13 @@
 #define STATEMENT_FORMAT__H
 
 #include "Interfaces/LanguageInt.h"
+#include <string>
 
 namespace communicating
 {
     class StatementFormat : public LanguageInt
     {
-        void translateObject();
+        bool translateObject(std::string&, Option&);
     };
 }
 

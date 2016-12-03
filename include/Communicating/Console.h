@@ -2,6 +2,8 @@
 #define CONSOLE__H
 
 #include "Interfaces/IOInt.h"
+#include <Configurator.h>
+#include <string>
 
 namespace communicating
 {
@@ -12,8 +14,8 @@ namespace communicating
     {
 	public:
 		Console(LanguageInt&);
-        void receive();
-        void send();
+        bool receive(Option&);
+        void send(const std::string&);
     };
 }
 

@@ -3,17 +3,19 @@
 
 #include <DependencyInjector.h>
 #include "LanguageInt.h"
+#include <Configurator.h>
+#include <string>
 
 namespace communicating
 {
-    class IOInt : private DependencyInjector<LanguageInt>
+    class IOInt : protected DependencyInjector<LanguageInt>
     {
     public:
 		IOInt(LanguageInt&);
 		virtual ~IOInt() = 0;
 
-        virtual void receive() = 0;
-        virtual void send() = 0;
+        virtual bool receive(Option&) = 0;
+        virtual void send(const std::string&) = 0;
     };
 
 	inline IOInt::IOInt(LanguageInt& lang)

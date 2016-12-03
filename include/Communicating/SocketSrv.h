@@ -2,6 +2,8 @@
 #define SOCKET_SRV__H
 
 #include "Interfaces/IOInt.h"
+#include "BoostSocketSrv.h"
+#include <boost/asio.hpp>
 
 namespace communicating
 {
@@ -12,8 +14,12 @@ namespace communicating
     {
 	public:
 		SocketSrv(LanguageInt&);
-        void receive();
-        void send();
+		~SocketSrv();
+        bool receive(Option&);
+        void send(const std::string&);
+
+	private:
+		BoostSocketSrv m_socketSrvImpl;
     };
 }
 

@@ -7,12 +7,12 @@ Console::Console(LanguageInt& impl) : IOInt(impl)
 
 }
 
-void Console::receive()
+bool Console::receive(Option&)
 {
 
 }
 
-void Console::send()
+void Console::send(const std::string&)
 {
 
 }

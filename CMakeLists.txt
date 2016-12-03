@@ -10,7 +10,7 @@ file(
 )
 
 find_package(Threads REQUIRED)
-find_package(Boost REQUIRED)
+find_package(Boost REQUIRED system)
 
 add_executable(
 	AlerterSrv
