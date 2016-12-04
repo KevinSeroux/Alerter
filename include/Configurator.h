@@ -1,38 +1,25 @@
 #ifndef CONFIGURATOR__H
 #define CONFIGURATOR__H
 
-#include "OptionTypedData.h"
-#include "Singleton.h"
-#include <string>
-#include <map>
+#define BOOST_SPIRIT_THREADSAFE //Make boost property tree thread-safe
 
-class OptionNotFound : public std::runtime_error
-{
-public:
-	OptionNotFound(std::string& str) : runtime_error(str) {}
-};
+#include "Singleton.h"
+#include <boost/property_tree/ptree.hpp>
+#include <boost/any.hpp>
 
 struct Option
 {
 	std::string id;
-	OptionTypedData data;
+	std::string data;
 };
 
-class Configurator : public Singleton<Configurator>
+class Configurator :
+public Singleton<Configurator>, public boost::property_tree::ptree
 {
 friend class Singleton<Configurator>;
 
-public:
-	/* \param id The option identifier
-	 * \param create Set to true if the option must be created */
-	OptionTypedData& operator()(const char* id, bool doCreate = false);
-
-	const OptionTypedData& operator()(const char*) const;
-
 private:
 	Configurator();
-
-	std::map<std::string, OptionTypedData> m_options;
 };
 
 #endif //CONFIGURATOR__H

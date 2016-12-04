@@ -8,7 +8,8 @@ using namespace boost::system;
 
 BoostSocketSrv::BoostSocketSrv() :
 	m_acceptor(m_ioService, ip::tcp::endpoint(ip::tcp::v4(), 2000)),
-	m_socket(m_ioService)
+	m_socket(m_ioService),
+	m_isNewMessage(false)
 {
 
 }
@@ -38,6 +39,7 @@ void BoostSocketSrv::run()
 				m_receiveBufferProtector.lock();
 				m_receiveBuffer.append(myBuffer, bytesRead);
 				m_receiveBufferProtector.unlock();
+				m_isNewMessage = true;
 			}
 			else
 				handleIfError(myError);
@@ -57,13 +59,20 @@ void BoostSocketSrv::send(const std::string& str)
 	m_socket.async_write_some(asio::buffer(str, str.size()), handleSendProxy);
 }
 
-std::string BoostSocketSrv::receive() const
+bool BoostSocketSrv::receive(std::string& str)
 {
-	m_receiveBufferProtector.lock();
-	std::string str = m_receiveBuffer;
-	m_receiveBufferProtector.unlock();
+	bool retValue = m_isNewMessage;
 
-	return str;
+	if(m_isNewMessage)
+	{
+		m_receiveBufferProtector.lock();
+		str = m_receiveBuffer;
+		m_receiveBuffer.clear();
+		m_receiveBufferProtector.unlock();
+		m_isNewMessage = false;
+	}
+
+	return retValue;
 }
 
 void BoostSocketSrv::handleSend(
@@ -77,6 +86,8 @@ void BoostSocketSrv::handleIfError(const error_code& theError)
 	if(theError == error::eof || theError == errc::connection_reset)
 	{
 		m_doResetConnection = true;
+		m_isNewMessage = false;
+		m_receiveBuffer.clear();
 		m_socket.close();
 	}
 }

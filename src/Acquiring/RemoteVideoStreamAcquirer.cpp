@@ -7,7 +7,8 @@ using namespace std::chrono_literals;
 
 RemoteVideoStreamAcquirer::RemoteVideoStreamAcquirer()
 {
-	Configurator::getInstance()("StreamLocation", true) = "undefined";
+	Configurator::getInstance().put("StreamLocation", "undefined");
+	Configurator::getInstance().put("FrameRate", 23.976f);
 }
 
 void RemoteVideoStreamAcquirer::getImage()
@@ -21,6 +22,12 @@ void RemoteVideoStreamAcquirer::run()
 
 	while(true)
 	{
-		std::this_thread::sleep_for(1s);
+		//Do things
+
+		//Wait
+		int framePause = 1000.f /
+			Configurator::getInstance().get<float>("FrameRate");
+		std::cout << "Waiting " << framePause << " ms." << std::endl;
+		std::this_thread::sleep_for(std::chrono::milliseconds(framePause));
 	}
 }

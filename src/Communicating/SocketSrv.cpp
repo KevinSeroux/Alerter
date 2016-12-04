@@ -5,7 +5,7 @@ using namespace communicating;
 
 SocketSrv::SocketSrv(LanguageInt& lang) : IOInt(lang)
 {
-	m_socketSrvImpl.start();	
+	m_socketSrvImpl.start();
 }
 
 SocketSrv::~SocketSrv()
@@ -15,13 +15,15 @@ SocketSrv::~SocketSrv()
 
 bool SocketSrv::receive(Option& option)
 {
-	std::string str = m_socketSrvImpl.receive();
+	std::string str;
 	bool isParseDone = false;
-
-	// In fact, there is only one language implementation
-	forEach([&isParseDone, &str, &option](auto lang) {
-		isParseDone = lang->translateObject(str, option);
-	});
+	if(m_socketSrvImpl.receive(str))
+	{
+		// In fact, there is only one language implementation
+		forEach([&isParseDone, &str, &option](auto lang) {
+			isParseDone = lang->stringToOption(str, option);
+		});
+    }
 
 	return isParseDone;
 }

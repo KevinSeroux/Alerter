@@ -13,7 +13,7 @@ namespace communicating
 	public:
 		BoostSocketSrv();
 		void send(const std::string&);
-		std::string receive() const;
+		bool receive(std::string&);
 
 	private:
 		void run();
@@ -26,6 +26,7 @@ namespace communicating
 		std::string m_receiveBuffer;
 		mutable std::mutex m_receiveBufferProtector;
 		std::atomic<bool> m_doResetConnection;
+		std::atomic<bool> m_isNewMessage;
 	};
 }
 

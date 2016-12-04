@@ -8,7 +8,8 @@ namespace communicating
 {
 	class StatementFormat : public LanguageInt
 	{
-		bool translateObject(std::string&, Option&);
+	public:
+		bool stringToOption(std::string&, Option&);
 	};
 }
 
