@@ -1,5 +1,5 @@
 #include "Acquiring/RemoteVideoStreamAcquirer.h"
-#include <Configurator.h>
+#include <System/Configurator.h>
 #include <iostream>
 
 using namespace acquiring;
@@ -25,9 +25,10 @@ void RemoteVideoStreamAcquirer::run()
 		//Do things
 
 		//Wait
-		int framePause = 1000.f /
-			Configurator::getInstance().get<float>("FrameRate");
-		std::cout << "Waiting " << framePause << " ms." << std::endl;
-		std::this_thread::sleep_for(std::chrono::milliseconds(framePause));
+		float frameRate = Configurator::getInstance().get<float>("FrameRate");
+		int framePeriod = static_cast<int>(ceil(1000.f / frameRate));
+		int pause = std::max(1, framePeriod);
+		std::cout << "Waiting " << pause << " ms." << std::endl;
+		std::this_thread::sleep_for(std::chrono::milliseconds(pause));
 	}
 }

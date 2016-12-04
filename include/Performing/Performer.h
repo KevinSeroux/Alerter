@@ -1,8 +1,8 @@
 #ifndef PERFORMER__H
 #define PERFORMER__H
 
-#include <Thread.h>
-#include <DependencyInjector.h>
+#include <System/Thread.h>
+#include <System/DependencyInjector.h>
 #include "Interfaces/PerformerInt.h"
 
 namespace performing

@@ -1,3 +1,3 @@
-#include "Configurator.h"
+#include <System/Configurator.h>
 
 Configurator::Configurator() {}

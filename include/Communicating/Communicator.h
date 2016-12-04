@@ -1,8 +1,8 @@
 #ifndef COMMUNICATOR__H
 #define COMMUNICATOR__H
 
-#include <Thread.h>
-#include <DependencyInjector.h>
+#include <System/Thread.h>
+#include <System/DependencyInjector.h>
 #include "Interfaces/IOInt.h"
 #include <mutex>
 

@@ -1,9 +1,9 @@
 #ifndef IO_INT__H
 #define IO_INT__H
 
-#include <DependencyInjector.h>
+#include <System/DependencyInjector.h>
 #include "LanguageInt.h"
-#include <Configurator.h>
+#include <System/Configurator.h>
 #include <string>
 
 namespace communicating

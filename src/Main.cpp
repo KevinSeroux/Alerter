@@ -1,11 +1,11 @@
-#include "Communicating/Communicator.h"
-#include "Communicating/Console.h"
-#include "Communicating/SocketSrv.h"
-#include "Communicating/StatementFormat.h"
-#include "Acquiring/RemoteVideoStreamAcquirer.h"
-#include "Performing/Performer.h"
-#include "Performing/OpenCVPerformer.h"
-#include "Configurator.h"
+#include <Communicating/Communicator.h>
+#include <Communicating/Console.h>
+#include <Communicating/SocketSrv.h>
+#include <Communicating/StatementFormat.h>
+#include <Acquiring/RemoteVideoStreamAcquirer.h>
+#include <Performing/Performer.h>
+#include <Performing/OpenCVPerformer.h>
+#include <System/Configurator.h>
 #include <iostream>
 
 int main(int argc, char* argv[])

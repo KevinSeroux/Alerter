@@ -2,7 +2,7 @@
 #define CONSOLE__H
 
 #include "Interfaces/IOInt.h"
-#include <Configurator.h>
+#include <System/Configurator.h>
 #include <string>
 
 namespace communicating

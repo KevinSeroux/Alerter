@@ -2,7 +2,7 @@
 #define REMOTE_VIDEO_STREAM_ACQUIRER
 
 #include "Interfaces/VideoStreamAcquirerInt.h"
-#include <Thread.h>
+#include <System/Thread.h>
 
 namespace acquiring
 {

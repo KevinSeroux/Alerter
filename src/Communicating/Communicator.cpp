@@ -33,8 +33,10 @@ void Communicator::run()
 			}
 		});
 
-		//Wait		
-		int framePause = 1000.f / c.get<float>("FrameRate");
-		std::this_thread::sleep_for(std::chrono::milliseconds(framePause));
+		//Wait
+		float frameRate = Configurator::getInstance().get<float>("FrameRate");
+		int framePeriod = static_cast<int>(ceil(1000.f / frameRate));
+		int pause = std::max(1, framePeriod);
+		std::this_thread::sleep_for(std::chrono::milliseconds(pause));
 	}
 }

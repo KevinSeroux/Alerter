@@ -1,8 +1,7 @@
 #ifndef LANGUAGE_INT__H
 #define LANGUAGE_INT__H
 
-#include <OptionTypedData.h>
-#include <Configurator.h>
+#include <System/Configurator.h>
 #include <string>
 
 namespace communicating
