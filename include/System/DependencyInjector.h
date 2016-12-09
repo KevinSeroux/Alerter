@@ -3,6 +3,7 @@
 
 #include <mutex>
 #include <vector>
+#include <cassert>
 
 // 
 // T is the interface class for the different implementations
@@ -19,11 +20,15 @@ protected:
 
 	/* Call this method with a lambda function to iterate over the
 	 * implementations */
-	template <typename Function> void forEach(Function);
+	template <typename Function> void forEachImpl(Function) const;
+
+	template <typename Function> void implDo(size_t, Function) const;
+
+	template <typename Function> void implDo(Function) const;
 
 private:
 	std::vector<T*> m_implementations;
-	std::mutex m_implProtector;
+	mutable std::mutex m_implProtector;
 };
 
 template <class T> DependencyInjector<T>::DependencyInjector() {}
@@ -32,22 +37,35 @@ template <class T> DependencyInjector<T>::~DependencyInjector() {}
 
 template<class T> void DependencyInjector<T>::addImpl(T& impl)
 {
-	m_implProtector.lock();
+	std::unique_lock<std::mutex> lck(m_implProtector);
 	m_implementations.push_back(&impl);
-	m_implProtector.unlock();
 }
 
 template<class T> template<typename Function>
-void DependencyInjector<T>::forEach(Function f)
+void DependencyInjector<T>::forEachImpl(Function f) const
 {
-	m_implProtector.lock();
+	std::unique_lock<std::mutex> lck(m_implProtector);
 
 	for(auto impl : m_implementations)
-	{
 		f(impl);
-	}
+}
 
-	m_implProtector.unlock();
+template <class T> template<typename Function>
+void DependencyInjector<T>::implDo(size_t implId, Function f) const
+{
+	assert(implId < m_implementations.size() && "Implementation id too big");
+
+	std::unique_lock<std::mutex> lck(m_implProtector);
+	f(m_implementations[implId]);
+}
+
+template <class T> template<typename Function>
+void DependencyInjector<T>::implDo(Function f) const
+{
+	assert(m_implementations.size() == 1 &&
+		"There must be one and only one implementation to use this method");
+
+	implDo(0, f);
 }
 
 #endif // DEPENDENCYINJECTOR_H

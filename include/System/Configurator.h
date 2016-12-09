@@ -18,6 +18,9 @@ public Singleton<Configurator>, public boost::property_tree::ptree
 {
 friend class Singleton<Configurator>;
 
+public:
+	std::string toJSON() const;
+
 private:
 	Configurator();
 };

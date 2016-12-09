@@ -17,7 +17,7 @@ void Communicator::run()
 	while(true)
 	{
 		//Do things
-		forEach([&opt, &c](auto impl)
+		forEachImpl([&opt, &c](auto impl)
 		{
 			if(impl->receive(opt))
 			{

@@ -19,8 +19,7 @@ bool SocketSrv::receive(Option& option)
 	bool isParseDone = false;
 	if(m_socketSrvImpl.receive(str))
 	{
-		// In fact, there is only one language implementation
-		forEach([&isParseDone, &str, &option](auto lang) {
+		implDo([&isParseDone, &str, &option](auto lang) {
 			isParseDone = lang->stringToOption(str, option);
 		});
     }

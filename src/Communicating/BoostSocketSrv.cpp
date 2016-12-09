@@ -1,4 +1,5 @@
 #include <Communicating/BoostSocketSrv.h>
+#include <System/Configurator.h>
 #include <boost/bind.hpp>
 
 using namespace communicating;
@@ -21,6 +22,9 @@ void BoostSocketSrv::run()
 		// Accept the next connection (blocking)
 		m_acceptor.accept(m_socket);
 		m_doResetConnection = false;
+
+		std::string vars = Configurator::getInstance().toJSON();
+		send(vars);
 
 		// Repeat until the connection must be reset (client disconnect, ...)
 		while(!m_doResetConnection)

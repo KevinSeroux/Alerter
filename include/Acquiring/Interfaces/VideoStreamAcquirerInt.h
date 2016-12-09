@@ -1,12 +1,14 @@
 #ifndef VIDEO_STREAM_ACQUIRER_INT
 #define VIDEO_STREAM_ACQUIRER_INT
 
+#include <opencv2/core.hpp>
+
 namespace acquiring
 {
 	class VideoStreamAcquirerInt
 	{
 	public:
-		virtual void getImage() = 0;
+		virtual cv::Mat getImage() = 0;
 	};
 }
 

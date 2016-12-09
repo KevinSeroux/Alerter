@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 2.6)
 project(Alerter)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
+set("OpenCV_DIR" "." CACHE FILEPATH "Set to the build directory of OpenCV")
+set(Boost_USE_STATIC_LIBS ON)
+
 file(
 	GLOB_RECURSE
 	source_files
@@ -19,6 +22,7 @@ endforeach()
 
 find_package(Threads REQUIRED)
 find_package(Boost REQUIRED COMPONENTS system date_time regex)
+find_package(OpenCV REQUIRED)
 
 add_executable(
 	AlerterSrv
@@ -28,10 +32,12 @@ add_executable(
 include_directories(
 	include
 	${Boost_INCLUDE_DIRS}
+	${OpenCV_INCLUDE_DIRS}
 )
 
 target_link_libraries(
 	AlerterSrv
 	${CMAKE_THREAD_LIBS_INIT}
 	${Boost_LIBRARIES}
+	${OpenCV_LIBS}
 )

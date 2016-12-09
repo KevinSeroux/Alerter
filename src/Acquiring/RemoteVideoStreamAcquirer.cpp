@@ -4,6 +4,7 @@
 
 using namespace acquiring;
 using namespace std::chrono_literals;
+using namespace cv;
 
 RemoteVideoStreamAcquirer::RemoteVideoStreamAcquirer()
 {
@@ -11,9 +12,9 @@ RemoteVideoStreamAcquirer::RemoteVideoStreamAcquirer()
 	Configurator::getInstance().put("FrameRate", 23.976f);
 }
 
-void RemoteVideoStreamAcquirer::getImage()
+Mat RemoteVideoStreamAcquirer::getImage()
 {
-
+	return Mat();
 }
 
 void RemoteVideoStreamAcquirer::run()

@@ -11,7 +11,7 @@ namespace acquiring
 	{
 	public:
 		RemoteVideoStreamAcquirer();
-		void getImage();
+		cv::Mat getImage();
 
 	private:
 		void run();
