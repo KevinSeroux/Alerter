@@ -1,20 +1,15 @@
 #ifndef REMOTE_VIDEO_STREAM_ACQUIRER
 #define REMOTE_VIDEO_STREAM_ACQUIRER
 
-#include "Interfaces/VideoStreamAcquirerInt.h"
+#include "VideoStreamAcquirer.h"
 #include <System/Thread.h>
 
 namespace acquiring
 {
-	class RemoteVideoStreamAcquirer :
-	public VideoStreamAcquirerInt, public Thread
+	class RemoteVideoStreamAcquirer : public VideoStreamAcquirer
 	{
-	public:
-		RemoteVideoStreamAcquirer();
-		cv::Mat getImage();
-
 	private:
-		void run();
+		cv::Mat fetchImage();
 	};
 }
 

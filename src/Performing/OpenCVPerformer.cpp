@@ -46,7 +46,7 @@ Mat OpenCVPerformer::dilate(const Mat& src) const
 {
 	Mat ret, kernel;
 
-	kernel = getStructuringElement(MORPH_ELLIPSE, Size(10, 10));
+	kernel = getStructuringElement(MORPH_RECT, Size(5, 5));
 	cv::dilate(src, ret, kernel, Point(-1, -1), 2);
 
 	return ret;
@@ -76,7 +76,7 @@ vector<Rect> OpenCVPerformer::detectBodies(const cv::Mat& frame,
 {
 	vector<Rect> foundLocations;
 	m_peopleDescriptor.detectMultiScale(frame, foundLocations, sensitivity,
-		Size(4, 4), Size(32, 64), 1.05, 2);
+		Size(8, 8), Size(32, 64), 1.05, 2);
 
 	return foundLocations;
 }

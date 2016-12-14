@@ -3,7 +3,7 @@
 
 #include <System/Thread.h>
 #include <System/DependencyInjector.h>
-#include <Acquiring/Interfaces/VideoStreamAcquirerInt.h>
+#include <Acquiring/VideoStreamAcquirer.h>
 #include "Interfaces/PerformerInt.h"
 #include <vector>
 
@@ -15,7 +15,7 @@ namespace performing
 	class Performer : public Thread, private DependencyInjector<PerformerInt>
 	{
 	public:
-		Performer(PerformerInt&, acquiring::VideoStreamAcquirerInt&);
+		Performer(PerformerInt&, acquiring::VideoStreamAcquirer&);
 		void run();
 
 	private:
@@ -25,8 +25,8 @@ namespace performing
 		cv::Mat computeDiffFrame(const std::vector<cv::Mat>&);
 		cv::Mat improveDiffFrame(const cv::Mat&);
 		void displayFrame(const char*, const cv::Mat&);
-			
-		acquiring::VideoStreamAcquirerInt* m_acq;
+
+		acquiring::VideoStreamAcquirer* m_acq;
 		Configurator* m_configurator;
 	};
 }

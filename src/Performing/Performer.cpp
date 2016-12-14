@@ -9,13 +9,13 @@ using namespace std::chrono_literals;
 using namespace cv;
 using namespace std;
 
-Performer::Performer(PerformerInt& impl, VideoStreamAcquirerInt& acq)
+Performer::Performer(PerformerInt& impl, VideoStreamAcquirer& acq)
 {
 	addImpl(impl);
 	m_acq = &acq;
 
 	m_configurator = &Configurator::getInstance();
-	m_configurator->put("CountPersistantImages", 4);
+	m_configurator->put("CountPersistantImages", 12);
 	m_configurator->put("MotionThreshold", 75);
 	m_configurator->put("BodyDetectionPass", true);
 	m_configurator->put("BodyDetectionSensitivity", 1);
@@ -28,6 +28,9 @@ void Performer::run()
 
 	while(true)
 	{
+		auto startTime = chrono::system_clock::now().time_since_epoch() /
+			chrono::milliseconds(1);
+
 		Mat RGBFrame;
 		vector<Mat> persistantFrames = getPersistantFrames(RGBFrame);
 		vector<Rect> changesLocation = findMotion(persistantFrames);
@@ -50,6 +53,12 @@ void Performer::run()
 				vector<Rect> humansLoc = findBodies(subFrame);
 			}
 		}
+
+		auto endTime = chrono::system_clock::now().time_since_epoch() /
+			chrono::milliseconds(1);
+
+		if (m_configurator->get<bool>("Debug"))
+			cout << "Performing time: " << endTime - startTime << "ms" << endl;
 	}
 }
 

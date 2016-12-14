@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
 		communicator.addImpl(socketSrv);
 
 		//acquiring::RemoteVideoStreamAcquirer videoStreamAcquirer;
-		const char* videoPath = R"(C:\Users\MrG0z\Documents\Visual Studio 2015\Projects\HumanDetector\Release\pedestrian.avi)";
+		const char* videoPath = R"(samples/pedestrian.avi)";
 		LocalVideoStreamAcquirer videoStreamAcquirer(videoPath);
 
 		OpenCVPerformer cvPerformer;
@@ -47,6 +47,9 @@ int main(int argc, char* argv[])
 	} catch (const FileNotFound& e) {
 		cerr << e.what() << endl;
 	}
+
+	// Wait
+	cin.get();
 
 	return 0;
 }

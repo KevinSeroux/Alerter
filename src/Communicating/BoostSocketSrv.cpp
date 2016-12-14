@@ -15,40 +15,57 @@ BoostSocketSrv::BoostSocketSrv() :
 
 }
 
+void BoostSocketSrv::exit()
+{
+	//m_doResetConnection = true; //TODO: Determine whether remove
+	m_ioService.stop();
+}
+
 void BoostSocketSrv::run()
 {
-	while(true)
+	// Accept next connection and block
+	acceptNextConnection();
+	m_ioService.run();
+}
+
+void BoostSocketSrv::acceptNextConnection()
+{
+	// Accept the next connection
+	m_acceptor.async_accept(m_socket, bind(&BoostSocketSrv::handleAccept,
+		this, asio::placeholders::error));
+}
+
+void BoostSocketSrv::handleAccept(const error_code& err)
+{
+	if (err)
+		return;
+
+	m_doResetConnection = false;
+
+	// Repeat until the connection must be reset (client disconnect, ...)
+	while (!m_doResetConnection)
 	{
-		// Accept the next connection (blocking)
-		m_acceptor.accept(m_socket);
-		m_doResetConnection = false;
+		const size_t BUFFER_SIZE = 128;
+		char myBuffer[BUFFER_SIZE];
+		system::error_code myError;
 
-		std::string vars = Configurator::getInstance().toJSON();
-		send(vars);
+		// Get the next data (blocking)
+		size_t bytesRead = m_socket.receive(
+			asio::buffer(myBuffer, BUFFER_SIZE), 0, myError);
 
-		// Repeat until the connection must be reset (client disconnect, ...)
-		while(!m_doResetConnection)
+		if (myError == 0) // No error
 		{
-			const size_t BUFFER_SIZE = 128;
-			char myBuffer[BUFFER_SIZE];
-			system::error_code myError;
-
-			// Get the next data (blocking)
-			size_t bytesRead = m_socket.receive(
-				asio::buffer(myBuffer, BUFFER_SIZE), 0, myError);
-
-			if(myError == 0) // No error
-			{
-				// Fill the std::string buffer in a thread-safe way
-				m_receiveBufferProtector.lock();
-				m_receiveBuffer.append(myBuffer, bytesRead);
-				m_receiveBufferProtector.unlock();
-				m_isNewMessage = true;
-			}
-			else
-				handleIfError(myError);
+			// Fill the std::string buffer in a thread-safe way
+			m_receiveBufferProtector.lock();
+			m_receiveBuffer.append(myBuffer, bytesRead);
+			m_receiveBufferProtector.unlock();
+			m_isNewMessage = true;
 		}
+		else
+			handleIfError(myError);
 	}
+
+	acceptNextConnection();
 }
 
 void BoostSocketSrv::send(const std::string& str)

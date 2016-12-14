@@ -14,9 +14,12 @@ namespace communicating
 		BoostSocketSrv();
 		void send(const std::string&);
 		bool receive(std::string&);
+		void exit();
 
 	private:
 		void run();
+		void acceptNextConnection();
+		void handleAccept(const boost::system::error_code&);
 		void handleSend(const boost::system::error_code&, size_t);
 		void handleIfError(const boost::system::error_code&);
 

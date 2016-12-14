@@ -10,6 +10,7 @@ SocketSrv::SocketSrv(LanguageInt& lang) : IOInt(lang)
 
 SocketSrv::~SocketSrv()
 {
+	m_socketSrvImpl.exit();
 	m_socketSrvImpl.join();
 }
 
