@@ -12,6 +12,8 @@ namespace communicating
 	{
 	public:
 		Communicator();
+		void handleCommand(IOInt&, const std::string&);
+		void handleOption(IOInt&, const Option&);
 
 	private:
 		void run();

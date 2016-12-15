@@ -92,7 +92,7 @@ void OpenCVPerformer::displayFrame(const char* desc, const Mat& src) const
 	Mat resizedFrame;
 
 	float ratio = (float)src.cols / src.rows;
-	resize(src, resizedFrame, Size(300 * ratio, 300));
+	resize(src, resizedFrame, Size(static_cast<int>(300 * ratio), 300));
 	imshow(desc, resizedFrame);
 	waitKey(1); // To update the windows
 }

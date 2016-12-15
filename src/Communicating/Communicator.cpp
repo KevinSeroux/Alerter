@@ -11,25 +11,18 @@ Communicator::Communicator()
 void Communicator::run()
 {
 	std::cout << typeid(this).name() << " Hello!";
+	OptionCommand optCmd;
 
-	Configurator& c = Configurator::getInstance();
-	Option opt;
 	while(true)
 	{
-		//Do things
-		forEachImpl([&opt, &c](auto impl)
+		forEachImpl([&optCmd, this](auto impl)
 		{
-			if(impl->receive(opt))
+			if (impl->receive(optCmd))
 			{
-				auto it = c.find(opt.id);
-				if(it == c.not_found())
-				{
-					std::cerr << "Remote client tried to change an " <<
-						"unregistered value: \"" << opt.id << "\"."
-						<< std::endl;
-				}
-				else
-					c.put(opt.id, opt.data);
+				if(optCmd.which() == COMMAND)
+					handleCommand(*impl, boost::get<std::string>(optCmd));
+				else if (optCmd.which() == OPTION)
+					handleOption(*impl, boost::get<Option>(optCmd));
 			}
 		});
 
@@ -39,4 +32,29 @@ void Communicator::run()
 		int pause = std::max(1, framePeriod);
 		std::this_thread::sleep_for(std::chrono::milliseconds(pause));
 	}
+}
+
+void Communicator::handleCommand(IOInt& impl, const std::string& cmd)
+{
+	if (strcmp(cmd.c_str(), "show vars") == 0)
+		impl.send(Configurator::getInstance().getOptions());
+	else
+	{
+		std::string msg = std::string("Unknown command: ") + cmd;
+		impl.send(msg);
+	}
+}
+
+void Communicator::handleOption(IOInt& impl, const Option& opt)
+{
+	Configurator& c = Configurator::getInstance();
+
+	auto it = c.find(opt.id);
+	if (it == c.not_found())
+	{
+		std::string msg = std::string("Unknown option: ") + opt.id;
+		impl.send(msg);
+	}
+	else
+		c.put(opt.id, opt.data);
 }

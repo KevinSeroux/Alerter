@@ -15,8 +15,9 @@ namespace communicating
 	public:
 		SocketSrv(LanguageInt&);
 		~SocketSrv();
-		bool receive(Option&);
+		bool receive(OptionCommand&);
 		void send(const std::string&);
+		void send(const std::vector<Option>&);
 
 	private:
 		BoostSocketSrv m_socketSrvImpl;

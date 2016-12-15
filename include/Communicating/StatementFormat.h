@@ -9,7 +9,9 @@ namespace communicating
 	class StatementFormat : public LanguageInt
 	{
 	public:
+		bool stringToCommand(std::string&, std::string&);
 		bool stringToOption(std::string&, Option&);
+		std::string optionsToString(const std::vector<Option>&);
 	};
 }
 

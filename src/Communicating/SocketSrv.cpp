@@ -1,5 +1,6 @@
 #include "Communicating/SocketSrv.h"
 #include <System/Configurator.h>
+#include <regex>
 
 using namespace communicating;
 
@@ -14,14 +15,27 @@ SocketSrv::~SocketSrv()
 	m_socketSrvImpl.join();
 }
 
-bool SocketSrv::receive(Option& option)
+bool SocketSrv::receive(OptionCommand& optCmd)
 {
 	std::string str;
 	bool isParseDone = false;
+
 	if(m_socketSrvImpl.receive(str))
 	{
-		implDo([&isParseDone, &str, &option](auto lang) {
-			isParseDone = lang->stringToOption(str, option);
+		implDo([&isParseDone, &str, &optCmd](auto lang)
+		{
+			std::string cmd;
+			Option opt;
+
+			isParseDone = lang->stringToOption(str, opt);
+			if (isParseDone)
+				optCmd = opt;
+			else
+			{
+				isParseDone = lang->stringToCommand(str, cmd);
+				if (isParseDone)
+					optCmd = cmd;
+			}
 		});
     }
 
@@ -30,5 +44,20 @@ bool SocketSrv::receive(Option& option)
 
 void SocketSrv::send(const std::string& data)
 {
-	m_socketSrvImpl.send(data);
+	const std::string msg = std::string("> ") + data + '\n';
+	m_socketSrvImpl.send(msg);
+}
+
+void SocketSrv::send(const std::vector<Option>& opts)
+{
+	static std::regex regExp(R"(\n)"); //Regex to append the "> "
+
+	std::string str = "> ";
+	implDo([&str, &opts](auto lang) {
+		str += lang->optionsToString(opts);
+	});
+	str = std::regex_replace(str, regExp, "\n> ");
+	str += '\n';
+
+	m_socketSrvImpl.send(str);
 }

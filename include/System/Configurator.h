@@ -6,6 +6,7 @@
 #include "Singleton.h"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/any.hpp>
+#include <vector>
 
 struct Option
 {
@@ -19,7 +20,7 @@ public Singleton<Configurator>, public boost::property_tree::ptree
 friend class Singleton<Configurator>;
 
 public:
-	std::string toJSON() const;
+	std::vector<Option> getOptions() const;
 
 private:
 	Configurator();

@@ -5,10 +5,17 @@ using namespace std;
 
 Configurator::Configurator() {}
 
-string Configurator::toJSON() const
+std::vector<Option> Configurator::getOptions() const
 {
-	ostringstream oss;
-	boost::property_tree::write_json(oss, *this);
+	std::vector<Option> list;
 
-	return oss.str();
+	for (auto it : *this)
+	{
+		Option opt;
+		opt.id = it.first;
+		opt.data = it.second.data();
+		list.push_back(opt);
+	}
+
+	return list;
 }
