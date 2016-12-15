@@ -2,7 +2,6 @@
 #define PERFORMER__H
 
 #include <System/Thread.h>
-#include <System/DependencyInjector.h>
 #include <Acquiring/VideoStreamAcquirer.h>
 #include "Interfaces/PerformerInt.h"
 #include <vector>
@@ -12,7 +11,7 @@ class Configurator;
 
 namespace performing
 {
-	class Performer : public Thread, private DependencyInjector<PerformerInt>
+	class Performer : public Thread
 	{
 	public:
 		Performer(PerformerInt&, acquiring::VideoStreamAcquirer&);
@@ -24,10 +23,10 @@ namespace performing
 		std::vector<cv::Mat> getPersistantFrames(cv::Mat&);
 		cv::Mat computeDiffFrame(const std::vector<cv::Mat>&);
 		cv::Mat improveDiffFrame(const cv::Mat&);
-		void displayFrame(const char*, const cv::Mat&);
 
-		acquiring::VideoStreamAcquirer* m_acq;
-		Configurator* m_configurator;
+		PerformerInt& m_perfImpl;
+		acquiring::VideoStreamAcquirer& m_acqImpl;
+		Configurator& m_configurator;
 	};
 }
 

@@ -7,28 +7,17 @@ using namespace std::chrono_literals;
 using namespace cv;
 using namespace std;
 
-LocalVideoStreamAcquirer::LocalVideoStreamAcquirer(int device) :
-	m_videoCapture(device)
+LocalVideoStreamAcquirer::LocalVideoStreamAcquirer() :
+	m_config(Configurator::getInstance())
 {
-	if (!m_videoCapture.isOpened())
-	{
-		string msg = "Cannot open the device " + to_string(device);
-		throw DeviceNotFound(msg);
-	}
-}
-
-LocalVideoStreamAcquirer::LocalVideoStreamAcquirer(const char* file) :
-	m_videoCapture(file)
-{
-	if (!m_videoCapture.isOpened())
-	{
-		string msg = "Cannot open the file " + string(file);
-		throw FileNotFound(msg);
-	}
+	try { handleStreamLocationChange(); }
+	catch (const CannotFetchImage&) {}
 }
 
 Mat LocalVideoStreamAcquirer::fetchImage()
 {
+	handleStreamLocationChange();
+
 	Mat frame;
 	m_videoCapture >> frame;
 
@@ -40,4 +29,20 @@ Mat LocalVideoStreamAcquirer::fetchImage()
 	}
 
 	return frame;
+}
+
+void LocalVideoStreamAcquirer::handleStreamLocationChange()
+{
+	std::string newStreamLoc = m_config.get<std::string>("StreamLocation");
+	if (m_currentStreamLoc.compare(newStreamLoc) != 0) // 0 = no change
+	{
+		m_currentStreamLoc = newStreamLoc;
+		if (!m_videoCapture.open(m_currentStreamLoc))
+		{
+			std::string msg = "Following file not found:";
+			msg += m_currentStreamLoc;
+
+			throw CannotFetchImage(msg);
+		}
+	}
 }

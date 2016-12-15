@@ -47,15 +47,17 @@ void VideoStreamAcquirer::run()
 			m_imageQueue.set_capacity(queueSizeMax);
 		}
 
-		Mat frame = fetchImage();
-
-		{ // Critical section
-			unique_lock<mutex> lck(m_queueMutex);
-			m_imageQueue.push_back(frame);
+		try
+		{
+			Mat frame = fetchImage();
+			{ // Critical section
+				unique_lock<mutex> lck(m_queueMutex);
+				m_imageQueue.push_back(frame);
+			}
+			// One image added, wake up the consumer (getImage())
+			m_getImageCondVar.notify_one();
 		}
-
-		// One image added, wake up the consumer (getImage())
-		m_getImageCondVar.notify_one();
+		catch (const CannotFetchImage&)	{}
 
 		float frameRate = c.get<float>("FrameRate");
 		int framePeriod = static_cast<int>(ceil(1000.f / frameRate));

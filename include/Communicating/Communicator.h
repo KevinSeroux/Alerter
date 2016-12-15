@@ -2,21 +2,22 @@
 #define COMMUNICATOR__H
 
 #include <System/Thread.h>
-#include <System/DependencyInjector.h>
 #include "Interfaces/IOInt.h"
 #include <mutex>
 
 namespace communicating
 {
-	class Communicator : public Thread, public DependencyInjector<IOInt>
+	class Communicator : public Thread
 	{
 	public:
-		Communicator();
-		void handleCommand(IOInt&, const std::string&);
-		void handleOption(IOInt&, const Option&);
+		Communicator(IOInt&);
+		void handleCommand(const std::string&);
+		void handleOption(const Option&);
 
 	private:
 		void run();
+
+		IOInt& m_ioImpl;
 	};
 }
 

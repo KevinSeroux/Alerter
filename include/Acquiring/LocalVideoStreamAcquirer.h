@@ -1,8 +1,9 @@
-#ifndef LOCAL_VIDEO_STREAM_ACQUIRER
-#define LOCAL_VIDEO_STREAM_ACQUIRER
+#ifndef LOCAL_VIDEO_STREAM_ACQUIRER__H
+#define LOCAL_VIDEO_STREAM_ACQUIRER__H
 
 #include "VideoStreamAcquirer.h"
 #include <System/Thread.h>
+#include <System/Configurator.h>
 #include <opencv2/highgui.hpp>
 #include <boost/circular_buffer.hpp>
 #include <mutex>
@@ -10,27 +11,19 @@
 
 namespace acquiring
 {
-	class FileNotFound : public std::runtime_error {
-	public:
-		FileNotFound(const std::string msg) : runtime_error(msg) {}
-	};
-
-	class DeviceNotFound : public std::runtime_error {
-	public:
-		DeviceNotFound(const std::string msg) : runtime_error(msg) {}
-	};
-
 	class LocalVideoStreamAcquirer : public VideoStreamAcquirer
 	{
 	public:
-		LocalVideoStreamAcquirer(int dev = 0);
-		LocalVideoStreamAcquirer(const char*);
+		LocalVideoStreamAcquirer();
 
 	private:
 		cv::Mat fetchImage();
+		void handleStreamLocationChange();
 
+		Configurator& m_config;
+		std::string m_currentStreamLoc;
 		cv::VideoCapture m_videoCapture;
 	};
 }
 
-#endif // FILE_VIDEO_STREAM_ACQUIRER
+#endif // FILE_VIDEO_STREAM_ACQUIRER__H

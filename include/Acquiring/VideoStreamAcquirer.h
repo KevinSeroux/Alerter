@@ -8,6 +8,11 @@
 
 namespace acquiring
 {
+	class CannotFetchImage : public std::runtime_error {
+	public:
+		CannotFetchImage(const std::string msg) : runtime_error(msg) {}
+	};
+
 	class VideoStreamAcquirer : public Thread
 	{
 	public:

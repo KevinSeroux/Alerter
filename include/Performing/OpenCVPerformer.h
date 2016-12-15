@@ -2,7 +2,7 @@
 #define OPENCV_PERFORMER__H
 
 #include "Interfaces/PerformerInt.h"
-#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/highgui.hpp>
 #include <opencv2/gpu/gpu.hpp>
 #include <vector>
 

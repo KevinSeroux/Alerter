@@ -22,21 +22,18 @@ bool SocketSrv::receive(OptionCommand& optCmd)
 
 	if(m_socketSrvImpl.receive(str))
 	{
-		implDo([&isParseDone, &str, &optCmd](auto lang)
-		{
-			std::string cmd;
-			Option opt;
+		std::string cmd;
+		Option opt;
 
-			isParseDone = lang->stringToOption(str, opt);
+		isParseDone = m_lang.stringToOption(str, opt);
+		if (isParseDone)
+			optCmd = opt;
+		else
+		{
+			isParseDone = m_lang.stringToCommand(str, cmd);
 			if (isParseDone)
-				optCmd = opt;
-			else
-			{
-				isParseDone = lang->stringToCommand(str, cmd);
-				if (isParseDone)
-					optCmd = cmd;
-			}
-		});
+				optCmd = cmd;
+		}
     }
 
 	return isParseDone;
@@ -53,9 +50,7 @@ void SocketSrv::send(const std::vector<Option>& opts)
 	static std::regex regExp(R"(\n)"); //Regex to append the "> "
 
 	std::string str = "> ";
-	implDo([&str, &opts](auto lang) {
-		str += lang->optionsToString(opts);
-	});
+	str += m_lang.optionsToString(opts);
 	str = std::regex_replace(str, regExp, "\n> ");
 	str += '\n';
 

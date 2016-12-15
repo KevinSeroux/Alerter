@@ -3,7 +3,7 @@
 
 using namespace communicating;
 
-Communicator::Communicator()
+Communicator::Communicator(IOInt& impl) : m_ioImpl(impl)
 {
 
 }
@@ -15,16 +15,13 @@ void Communicator::run()
 
 	while(true)
 	{
-		forEachImpl([&optCmd, this](auto impl)
+		if (m_ioImpl.receive(optCmd))
 		{
-			if (impl->receive(optCmd))
-			{
-				if(optCmd.which() == COMMAND)
-					handleCommand(*impl, boost::get<std::string>(optCmd));
-				else if (optCmd.which() == OPTION)
-					handleOption(*impl, boost::get<Option>(optCmd));
-			}
-		});
+			if(optCmd.which() == COMMAND)
+				handleCommand(boost::get<std::string>(optCmd));
+			else if (optCmd.which() == OPTION)
+				handleOption(boost::get<Option>(optCmd));
+		}
 
 		//Wait
 		float frameRate = Configurator::getInstance().get<float>("FrameRate");
@@ -34,18 +31,18 @@ void Communicator::run()
 	}
 }
 
-void Communicator::handleCommand(IOInt& impl, const std::string& cmd)
+void Communicator::handleCommand(const std::string& cmd)
 {
 	if (strcmp(cmd.c_str(), "show vars") == 0)
-		impl.send(Configurator::getInstance().getOptions());
+		m_ioImpl.send(Configurator::getInstance().getOptions());
 	else
 	{
 		std::string msg = std::string("Unknown command: ") + cmd;
-		impl.send(msg);
+		m_ioImpl.send(msg);
 	}
 }
 
-void Communicator::handleOption(IOInt& impl, const Option& opt)
+void Communicator::handleOption(const Option& opt)
 {
 	Configurator& c = Configurator::getInstance();
 
@@ -53,7 +50,7 @@ void Communicator::handleOption(IOInt& impl, const Option& opt)
 	if (it == c.not_found())
 	{
 		std::string msg = std::string("Unknown option: ") + opt.id;
-		impl.send(msg);
+		m_ioImpl.send(msg);
 	}
 	else
 		c.put(opt.id, opt.data);

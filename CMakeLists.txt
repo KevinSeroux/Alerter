@@ -1,7 +1,8 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.1)
 project(Alerter)
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+set(CMAKE_CXX_STANDARD 14)
 set("OpenCV_DIR" "." CACHE FILEPATH "Set to the build directory of OpenCV")
 set(Boost_USE_STATIC_LIBS ON)
 
@@ -31,6 +32,7 @@ add_executable(
 
 include_directories(
 	include
+	3rdParty/include
 	${Boost_INCLUDE_DIRS}
 	${OpenCV_INCLUDE_DIRS}
 )
