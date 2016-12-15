@@ -41,7 +41,7 @@ bool SocketSrv::receive(OptionCommand& optCmd)
 
 void SocketSrv::send(const std::string& data)
 {
-	const std::string msg = std::string("> ") + data + '\n';
+	const std::string msg = std::string("> ") + data + "\r\n";
 	m_socketSrvImpl.send(msg);
 }
 
@@ -51,8 +51,8 @@ void SocketSrv::send(const std::vector<Option>& opts)
 
 	std::string str = "> ";
 	str += m_lang.optionsToString(opts);
-	str = std::regex_replace(str, regExp, "\n> ");
-	str += '\n';
+	str = std::regex_replace(str, regExp, "\r\n> ");
+	str += "\r\n";
 
 	m_socketSrvImpl.send(str);
 }

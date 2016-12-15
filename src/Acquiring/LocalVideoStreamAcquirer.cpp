@@ -37,12 +37,14 @@ void LocalVideoStreamAcquirer::handleStreamLocationChange()
 	if (m_currentStreamLoc.compare(newStreamLoc) != 0) // 0 = no change
 	{
 		m_currentStreamLoc = newStreamLoc;
-		if (!m_videoCapture.open(m_currentStreamLoc))
-		{
-			std::string msg = "Following file not found:";
-			msg += m_currentStreamLoc;
+		m_videoCapture.open(m_currentStreamLoc);
+	}
 
-			throw CannotFetchImage(msg);
-		}
+	if(!m_videoCapture.isOpened())
+	{
+		std::string msg = "Following file not found: ";
+		msg += m_currentStreamLoc;
+
+		throw CannotFetchImage(msg);
 	}
 }

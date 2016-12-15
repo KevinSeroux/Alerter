@@ -35,6 +35,7 @@ Mat VideoStreamAcquirer::getImage()
 void VideoStreamAcquirer::run()
 {
 	Configurator& c = Configurator::getInstance();
+	bool isLastFetchASuccess;
 
 	cout << typeid(this).name() << " Hello!" << endl;
 
@@ -50,6 +51,7 @@ void VideoStreamAcquirer::run()
 		try
 		{
 			Mat frame = fetchImage();
+			isLastFetchASuccess = true;
 			{ // Critical section
 				unique_lock<mutex> lck(m_queueMutex);
 				m_imageQueue.push_back(frame);
@@ -57,7 +59,14 @@ void VideoStreamAcquirer::run()
 			// One image added, wake up the consumer (getImage())
 			m_getImageCondVar.notify_one();
 		}
-		catch (const CannotFetchImage&)	{}
+		catch (const CannotFetchImage& e)
+		{
+			if (isLastFetchASuccess)
+			{
+				cerr << e.what() << endl;
+				isLastFetchASuccess = false;
+			}
+		}
 
 		float frameRate = c.get<float>("FrameRate");
 		int framePeriod = static_cast<int>(ceil(1000.f / frameRate));
