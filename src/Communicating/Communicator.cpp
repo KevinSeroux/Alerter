@@ -1,4 +1,5 @@
 #include "Communicating/Communicator.h"
+#include <opencv2/core.hpp>
 #include <iostream>
 
 using namespace communicating;
@@ -54,4 +55,25 @@ void Communicator::handleOption(const Option& opt)
 	}
 	else
 		c.put(opt.id, opt.data);
+}
+
+void Communicator::sendImage(const std::string& desc, const cv::Mat& img)
+{
+	std::ostringstream oss;
+
+	// To have all the data on one row (continuous)
+	//cv::Mat transferrableMat = img.reshape(0, 1);
+	oss << "img " << desc << ' '
+		<< img.type() << ' '
+		<< img.dims << ' '
+		<< img.cols << 'x' << img.rows << ' '
+		<< img.data << '\0';
+
+	std::string msg = oss.str();
+	m_ioImpl.send(msg);
+}
+
+void Communicator::send(const std::string& msg)
+{
+	m_ioImpl.send(msg);
 }

@@ -1,8 +1,11 @@
 #include "Performing/OpenCVPerformer.h"
 #include <System/Configurator.h>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
 
 using namespace performing;
 using namespace cv;
+using namespace std;
 
 OpenCVPerformer::OpenCVPerformer()
 {

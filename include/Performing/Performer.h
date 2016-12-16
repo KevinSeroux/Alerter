@@ -3,6 +3,7 @@
 
 #include <System/Thread.h>
 #include <Acquiring/VideoStreamAcquirer.h>
+#include <Communicating/Communicator.h>
 #include "Interfaces/PerformerInt.h"
 #include <vector>
 
@@ -14,7 +15,8 @@ namespace performing
 	class Performer : public Thread
 	{
 	public:
-		Performer(PerformerInt&, acquiring::VideoStreamAcquirer&);
+		Performer(PerformerInt&, acquiring::VideoStreamAcquirer&,
+			communicating::Communicator&);
 		void run();
 
 	private:
@@ -26,6 +28,7 @@ namespace performing
 
 		PerformerInt& m_perfImpl;
 		acquiring::VideoStreamAcquirer& m_acqImpl;
+		communicating::Communicator& m_comImpl;
 		Configurator& m_configurator;
 	};
 }

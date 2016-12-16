@@ -3,6 +3,7 @@
 
 #include <System/Thread.h>
 #include "Interfaces/IOInt.h"
+#include <opencv2/core.hpp>
 #include <mutex>
 
 namespace communicating
@@ -11,11 +12,13 @@ namespace communicating
 	{
 	public:
 		Communicator(IOInt&);
-		void handleCommand(const std::string&);
-		void handleOption(const Option&);
+		void sendImage(const std::string&, const cv::Mat&);
+		void send(const std::string&);
 
 	private:
 		void run();
+		void handleCommand(const std::string&);
+		void handleOption(const Option&);
 
 		IOInt& m_ioImpl;
 	};

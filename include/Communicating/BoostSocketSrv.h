@@ -27,6 +27,7 @@ namespace communicating
 		boost::asio::ip::tcp::acceptor m_acceptor;
 		boost::asio::ip::tcp::socket m_socket;
 		std::string m_receiveBuffer;
+		std::string m_sendBuffer;
 		mutable std::mutex m_receiveBufferProtector;
 		std::atomic<bool> m_doResetConnection;
 		std::atomic<bool> m_isNewMessage;

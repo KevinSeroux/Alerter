@@ -1,6 +1,7 @@
 #include <Communicating/BoostSocketSrv.h>
 #include <System/Configurator.h>
 #include <boost/bind.hpp>
+#include <boost/make_shared.hpp>
 
 using namespace communicating;
 using namespace boost::asio;
@@ -70,6 +71,9 @@ void BoostSocketSrv::handleAccept(const error_code& err)
 
 void BoostSocketSrv::send(const std::string& str)
 {
+	// Copy, because str is not accessible for async_write
+	m_sendBuffer = str;
+
 	static auto handleSendProxy = boost::bind(
 		&BoostSocketSrv::handleSend,
 		this,
@@ -77,7 +81,10 @@ void BoostSocketSrv::send(const std::string& str)
 		asio::placeholders::bytes_transferred
 	);
 
-	m_socket.async_write_some(asio::buffer(str, str.size()), handleSendProxy);
+	m_socket.async_write_some(
+		asio::buffer(m_sendBuffer, m_sendBuffer.size()),
+		handleSendProxy
+	);
 }
 
 bool BoostSocketSrv::receive(std::string& str)

@@ -49,7 +49,8 @@ int main(int argc, char* argv[])
 		di::bind<VideoStreamAcquirer>().to<LocalVideoStreamAcquirer>(),
 		di::bind<PerformerInt>().to<OpenCVPerformer>(),
 		di::bind<IOInt>().to<SocketSrv>(),
-		di::bind<LanguageInt>().to<StatementFormat>()
+		di::bind<LanguageInt>().to<StatementFormat>(),
+		di::bind<Communicator>().in(di::singleton)
 	);
 
 	App app = injector.create<App>();

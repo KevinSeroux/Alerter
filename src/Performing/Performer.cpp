@@ -5,12 +5,14 @@
 
 using namespace performing;
 using namespace acquiring;
+using namespace communicating;
 using namespace std::chrono_literals;
 using namespace cv;
 using namespace std;
 
-Performer::Performer(PerformerInt& perfImpl, VideoStreamAcquirer& acqImpl) :
-	m_perfImpl(perfImpl), m_acqImpl(acqImpl),
+Performer::Performer(PerformerInt& perfImpl, VideoStreamAcquirer& acqImpl,
+	Communicator& comImpl) :
+	m_perfImpl(perfImpl), m_acqImpl(acqImpl), m_comImpl(comImpl),
 	m_configurator(Configurator::getInstance())
 {
 	m_configurator.put("CountPersistantImages", 12);
@@ -18,6 +20,7 @@ Performer::Performer(PerformerInt& perfImpl, VideoStreamAcquirer& acqImpl) :
 	m_configurator.put("BodyDetectionPass", true);
 	m_configurator.put("BodyDetectionSensitivity", 1);
 	m_configurator.put("Debug", true);
+	m_configurator.put("SendImage", false);
 }
 
 void Performer::run()
@@ -32,27 +35,35 @@ void Performer::run()
 		Mat RGBFrame;
 		vector<Mat> persistantFrames = getPersistantFrames(RGBFrame);
 		vector<Rect> changesLocation = findMotion(persistantFrames);
+		bool doSendImage = m_configurator.get<bool>("SendImage");
+		bool doDebugging = m_configurator.get<bool>("Debug");
 
 		for (auto c : changesLocation)
 			m_perfImpl.drawRectangle(RGBFrame, c, Scalar(255, 0, 0), 3);
 
-		if (m_configurator.get<bool>("Debug"))
+		if (doDebugging)
 			m_perfImpl.displayFrame("Frame", RGBFrame);
+		if (doSendImage)
+			m_comImpl.sendImage("Frame", RGBFrame);
 
 		if (m_configurator.get<bool>("BodyDetectionPass"))
 		{
-			for(Rect zone : changesLocation)
+			for (Rect zone : changesLocation)
 			{
 				Mat subFrame = RGBFrame(zone);
 				vector<Rect> humansLoc = findBodies(subFrame);
+				if (doSendImage)
+					m_comImpl.sendImage("image", subFrame);
 			}
 		}
+		else
+			m_comImpl.sendImage("image", RGBFrame);
 
 		auto endTime = chrono::system_clock::now().time_since_epoch() /
 			chrono::milliseconds(1);
 
-		if (m_configurator.get<bool>("Debug"))
-			cout << "Performing time: " << endTime - startTime << "ms" << endl;
+		if (doDebugging)
+			cout << "Performing loop duration: " << endTime - startTime << "ms" << endl;
 	}
 }
 
